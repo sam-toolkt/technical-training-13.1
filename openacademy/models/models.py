@@ -5,6 +5,16 @@ class Course(models.Model):
     _name = 'openacademy.course'
     _description = "OpenAcademy Courses"
 
+    _sql_constraints = [
+        ('name_description_check',
+         'CHECK(name != description)',
+         "The title of the course should not be the description"),
+
+        ('name_unique',
+         'UNIQUE(name)',
+         "The course title must be unique"),
+    ]
+
     name = fields.Char(string="Title", required=True)
     description = fields.Text()
 
@@ -28,20 +38,13 @@ class Course(models.Model):
         default['name'] = new_name
         return super(Course, self).copy(default)
 
-    _sql_constraints = [
-        ('name_description_check',
-         'CHECK(name != description)',
-         "The title of the course should not be the description"),
-
-        ('name_unique',
-         'UNIQUE(name)',
-         "The course title must be unique"),
-    ]
+    
 
 
 class Session(models.Model):
     _name = 'openacademy.session'
     _description = "OpenAcademy Sessions"
+
 
     name = fields.Char(required=True)
     start_date = fields.Date(default=fields.Date.today)
